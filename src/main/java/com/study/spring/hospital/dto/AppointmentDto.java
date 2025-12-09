@@ -11,7 +11,7 @@ import lombok.Data;
 @Builder
 public class AppointmentDto {
 	private int a_id;
-	private String a_date;
+	private LocalDate a_date;
 	private String a_content;
 	private String a_dia_name;
 	private String a_dia_content;

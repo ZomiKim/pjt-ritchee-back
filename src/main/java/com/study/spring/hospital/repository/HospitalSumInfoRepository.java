@@ -21,6 +21,7 @@ public interface  HospitalSumInfoRepository extends JpaRepository<Hospital, Stri
 		 			MAX(H.h_smpl_dgm) AS h_smpl_dgm,
 		 			MAX(H.h_addr) AS h_addr,
 					MAX(H.h_tel1) As h_tel1,
+					MAX(H.h_tel2) As h_tel2,
 					MAX(H.h_long) As h_long,
 					MAX(H.h_lat) As h_lat,
 					MAX(CASE WHEN H.h_park_yn = 'Y' THEN '주차가능' ELSE '주차불가'END ) AS h_park_yn,
