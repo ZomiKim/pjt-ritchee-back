@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.study.spring.user.entity.User;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -39,7 +40,7 @@ public class H_appm {
 	@JoinColumn(name="a_user_id")
 	private User h_user;
 	
-	private String a_date;
+	private LocalDate a_date;
 	private String a_content;
 	private String a_del_yn;
 	private String a_dia_name;
@@ -47,7 +48,7 @@ public class H_appm {
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 	
-	@PrePersist
+	@PrePersist	
 	public void onCreate() {
 		this.createdAt = LocalDateTime.now();
 		this.updatedAt = LocalDateTime.now();

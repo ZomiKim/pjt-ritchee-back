@@ -1,17 +1,19 @@
 package com.study.spring.hospital.dto;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@AllArgsConstructor @NoArgsConstructor
 @Builder
-public class ReviewDto {
-	private int r_id;
+public class ReviewCreateDto {
+	private String h_code;
+	private UUID h_user_id;
+	private int a_id;
 	private String r_title;
 	private String r_content;
 	private Integer r_eval_pt;
