@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.study.spring.hospital.dto.MyReviewLikeDto;
 import com.study.spring.hospital.entity.H_review;
 import com.study.spring.hospital.repository.MyReviewLikeRepository;
 
@@ -18,14 +19,14 @@ import lombok.extern.slf4j.Slf4j;
 public class MyReviewService {
     private final MyReviewLikeRepository repo;
 
-    // reviewId 기준으로 리뷰 조회
-    public List<H_review> getMyReviews(Integer reviewId) {
+    // reviewId 기준으로 리뷰 조회 (DTO 반환)
+    public List<MyReviewLikeDto> getMyReviews(Integer reviewId) {
         log.info("Searching for review with ID: {}", reviewId);
         try {
             // 먼저 Native Query로 시도 (timestamp 제외)
             List<Object[]> rawResults = repo.findMyReviewsByReviewIdRaw(reviewId);
             if (!rawResults.isEmpty()) {
-                List<H_review> reviews = new ArrayList<>();
+                List<MyReviewLikeDto> reviewDtos = new ArrayList<>();
                 for (Object[] row : rawResults) {
                     H_review review = H_review.builder()
                             .r_id((Integer) row[0])
@@ -35,21 +36,33 @@ public class MyReviewService {
                             .r_views((Integer) row[7])
                             .r_del_yn((String) row[8])
                             .build();
-                    reviews.add(review);
+
+                    // likes 개수 가져오기 (timestamp 제외)
+                    Long likeCount = repo.countLikesByReviewId(reviewId);
+
+                    // DTO 생성 (likes 개수 포함)
+                    MyReviewLikeDto dto = new MyReviewLikeDto(review, likeCount != null ? likeCount : 0);
+                    reviewDtos.add(dto);
                 }
-                log.info("Found {} reviews for ID: {} (using raw query)", reviews.size(), reviewId);
-                return reviews;
+                log.info("Found {} reviews for ID: {} (using raw query)", reviewDtos.size(), reviewId);
+                return reviewDtos;
             }
             // Native Query로 결과가 없으면 JPQL 시도
             List<H_review> result = repo.findMyReviewsByReviewId(reviewId);
-            log.info("Found {} reviews for ID: {}", result.size(), reviewId);
-            return result;
+            List<MyReviewLikeDto> reviewDtos = new ArrayList<>();
+            for (H_review review : result) {
+                Long likeCount = repo.countLikesByReviewId(reviewId);
+                MyReviewLikeDto dto = new MyReviewLikeDto(review, likeCount != null ? likeCount : 0);
+                reviewDtos.add(dto);
+            }
+            log.info("Found {} reviews for ID: {}", reviewDtos.size(), reviewId);
+            return reviewDtos;
         } catch (DataIntegrityViolationException e) {
             log.error("Invalid timestamp data found for reviewId: {}. Error: {}", reviewId, e.getMessage(), e);
             // 예외 발생 시 Native Query로 재시도
             try {
                 List<Object[]> rawResults = repo.findMyReviewsByReviewIdRaw(reviewId);
-                List<H_review> reviews = new ArrayList<>();
+                List<MyReviewLikeDto> reviewDtos = new ArrayList<>();
                 for (Object[] row : rawResults) {
                     H_review review = H_review.builder()
                             .r_id((Integer) row[0])
@@ -59,9 +72,15 @@ public class MyReviewService {
                             .r_views((Integer) row[7])
                             .r_del_yn((String) row[8])
                             .build();
-                    reviews.add(review);
+
+                    // likes 개수 가져오기 (timestamp 제외)
+                    Long likeCount = repo.countLikesByReviewId(reviewId);
+
+                    // DTO 생성 (likes 개수 포함)
+                    MyReviewLikeDto dto = new MyReviewLikeDto(review, likeCount != null ? likeCount : 0);
+                    reviewDtos.add(dto);
                 }
-                return reviews;
+                return reviewDtos;
             } catch (Exception ex) {
                 log.error("Error in fallback query: {}", ex.getMessage());
                 return new ArrayList<>();

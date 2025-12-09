@@ -21,8 +21,20 @@ public class MyReviewLikeDto {
         this.r_views = review.getR_views();
         this.r_content = review.getR_content();
         this.createdAt = review.getCreatedAt();
-        this.likeCount = review.getLikes().size();
-        this.commentCount = review.getComments().size();
+        this.likeCount = review.getLikes() != null ? review.getLikes().size() : 0;
+        this.commentCount = review.getComments() != null ? review.getComments().size() : 0;
+    }
+
+    // likes 개수를 직접 받는 생성자
+    public MyReviewLikeDto(H_review review, long likeCount) {
+        this.r_id = review.getR_id();
+        this.r_title = review.getR_title();
+        this.r_eval_pt = review.getR_eval_pt();
+        this.r_views = review.getR_views();
+        this.r_content = review.getR_content();
+        this.createdAt = review.getCreatedAt();
+        this.likeCount = likeCount;
+        this.commentCount = review.getComments() != null ? review.getComments().size() : 0;
     }
 
     // Getters

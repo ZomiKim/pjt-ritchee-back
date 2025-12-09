@@ -45,4 +45,11 @@ public interface MyReviewLikeRepository extends JpaRepository<H_review, Integer>
 			    where r.r_id = :reviewId
 			""")
 	List<H_review> findMyReviewsByReviewId(@Param("reviewId") Integer reviewId);
+
+	@Query(value = """
+			    SELECT COUNT(*)
+			    FROM h_like l
+			    WHERE l.r_id = :reviewId
+			""", nativeQuery = true)
+	Long countLikesByReviewId(@Param("reviewId") Integer reviewId);
 }
