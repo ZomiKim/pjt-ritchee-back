@@ -102,10 +102,10 @@ public class HospitalController {
 	
 
 	// 리뷰별 댓글 리스트
-	@GetMapping("/api/comment")
-	public List<H_ReviewCommentDto> getCommentList() {
-		return hService.findWithComment();
-	}
+//	@GetMapping("/api/comment")
+//	public List<H_ReviewCommentDto> getCommentList() {
+//		return hService.findWithComment();
+//	}
 
 	
 	// 유저별 작성한 댓글 리스트
