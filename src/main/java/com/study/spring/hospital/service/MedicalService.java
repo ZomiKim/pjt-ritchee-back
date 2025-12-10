@@ -2,6 +2,7 @@ package com.study.spring.hospital.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.study.spring.hospital.dto.MedicalListDto;
@@ -12,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class MedicalService {
-
+	@Autowired
     private final MedicalReopository mReop;
 
     public List<MedicalListDto> getMedicalList() {

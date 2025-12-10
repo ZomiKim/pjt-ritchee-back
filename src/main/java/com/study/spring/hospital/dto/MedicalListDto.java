@@ -1,14 +1,17 @@
 package com.study.spring.hospital.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class MedicalListDto {
 
     private int a_id;
     private String a_content;
-    private String a_date;
+    private LocalDate a_date;
     private String a_del_yn;
     private String a_dia_content;
     private String a_dia_name;
@@ -20,7 +23,7 @@ public class MedicalListDto {
     public MedicalListDto(
             int a_id,
             String a_content,
-            String a_date,
+            LocalDate a_date,
             String a_del_yn,
             String a_dia_content,
             String a_dia_name,
