@@ -22,7 +22,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="h_comment")
 @Data
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class H_comment {
 	@Id
