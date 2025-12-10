@@ -296,7 +296,6 @@ public class HospitalService {
     			.r_title(req.getR_title())
     			.r_content(req.getR_content())
     			.r_eval_pt(req.getR_eval_pt())
-    			.r_views(req.getR_views())
     			.r_del_yn(req.getR_del_yn())
 	    		.build();
 	    

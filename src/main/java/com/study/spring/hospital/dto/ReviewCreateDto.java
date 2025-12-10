@@ -17,6 +17,5 @@ public class ReviewCreateDto {
 	private String r_title;
 	private String r_content;
 	private Integer r_eval_pt;
-	private Integer r_views;
 	private String r_del_yn;
 }

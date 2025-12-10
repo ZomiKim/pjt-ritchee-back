@@ -24,7 +24,7 @@ public class CommentController {
 		return H_MyReviewCommentDto.builder().r_id(review.getR_id()).createdAt(review.getCreatedAt())
 				.commentCount(review.getComments().size())
 				.comments(review.getComments().stream()
-						.map(comment -> new MyCommentDto(comment.getC_id(),
+						.map(comment -> new MyCommentDto(
 								reviewId,
 								comment.getH_user() != null ? comment.getH_user().getId() : null,
 								comment.getC_content()))

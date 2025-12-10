@@ -128,7 +128,7 @@ public class HospitalController {
 			hService.appmCreate(req);
 			return ResponseEntity.ok("Apponintment SUCCESS");	
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Review FAILURE: " + e.getMessage());	
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Apponintment FAILURE: " + e.getMessage());	
 		} 
 	}
 
