@@ -1,15 +1,9 @@
 package com.study.spring.hospital.controller;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
-
 import com.study.spring.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import com.study.spring.HospitalApplication;
-import com.study.spring.config.WebCorsConfig;
 import com.study.spring.hospital.dto.AppointmentDto;
 import com.study.spring.hospital.dto.CommentDto;
 import com.study.spring.hospital.dto.H_AppmListDto;
@@ -21,34 +15,22 @@ import com.study.spring.hospital.dto.H_ReviewCommentDto;
 import com.study.spring.hospital.dto.H_ReviewLikeDto;
 import com.study.spring.hospital.dto.HospitalDto;
 import com.study.spring.hospital.dto.LikeDto;
-import com.study.spring.hospital.dto.ReservationDto;
 import com.study.spring.hospital.dto.H_ReviewListDto;
 import com.study.spring.hospital.dto.H_ReviewUserDto;
 import com.study.spring.hospital.dto.ReviewDto;
-import com.study.spring.hospital.entity.H_appm;
 import com.study.spring.hospital.entity.H_review;
 import com.study.spring.hospital.entity.Hospital;
 import com.study.spring.hospital.repository.HospitalRepository;
 import com.study.spring.user.entity.User;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
 public class HospitalController {
-
-    private final WebCorsConfig webCorsConfig;
 	@Autowired
 	HospitalRepository hRepo;
-
-    HospitalController(WebCorsConfig webCorsConfig) {
-        this.webCorsConfig = webCorsConfig;
-    }
 
 	@GetMapping("/")
 	public String root() {
@@ -87,32 +69,6 @@ public class HospitalController {
 						.build())
 				.toList();
 	}
-	
-	@GetMapping("/api/review/{h_code}")
-	public H_ReviewListDto getOneOfHospitalReviewList(
-	        @PathVariable("h_code") String h_code) {
-
-	    Hospital h = hRepo.findWithReviews(h_code);
-
-	    return H_ReviewListDto.builder()
-	            .h_code(h.getH_code())
-	            .h_name(h.getH_name())
-	            .createdAt(h.getCreatedAt())
-	            .reviewCount(h.getReviews().size())
-	            .reviews(
-	                    h.getReviews().stream()
-	                            .map(review -> new ReviewDto(
-	                                    review.getR_id(),
-	                                    review.getR_title(),
-	                                    review.getR_content(),
-	                                    review.getR_eval_pt(),
-	                                    review.getR_views()
-	                            ))
-	                            .toList()   // Java 16+
-	            )
-	            .build();
-	}
-
 	
 	@GetMapping("/api/reviewUser")
 	public List<H_ReviewUserDto> getReviewWithUserList() {
@@ -207,58 +163,31 @@ public class HospitalController {
 				.toList();
 	}
 	
-//	@PostMapping("/api/appm")
-//	public H_appm appmCreate(@RequestBody ReservationDto req) {
-//		H_appm appm = H_appm.builder()
-//				.a_id(appm.getA_id())
-//				.a_date(appm.getA_date())
-//				.a_content(appm.getA_content())
-//				.a_del_yn(appm.getA_del_yn())
-//				.build();
-//		return hRepo.save(appm);
-//	}
-	
-	@PostMapping("/api/appm")
-	public ResponseEntity<String> appmCreate(@ModelAttribute ReservationDto req) {
-		System.out.println(req);
-		System.out.println((String)req.a_date.getClass().getSimpleName());
-//		LocalDate date = LocalDate.parse(req.a_date);
-		
-//		H_appm appm = H_appm.builder()
-//				.a_date(req.a_date)
-//				.a_content(req.a_content)
-//				.build();
-		
-		return ResponseEntity.ok(("SUCCESS	"));
-		
-	}
-	
-//	예약 개별 조회
-	@GetMapping("/api/appmUser/{userId}")
-	public H_AppmUserDto getAppmWithUser(@PathVariable("userId") UUID userId) {
-	    // 유저 + 예약 정보 포함 조회 (UserRepository에 해당 메소드가 있어야 함)
-	    User user = hRepo.findAppmWithUserById(userId);
-
-
-	    return H_AppmUserDto.builder()
-	            .id(user.getId())
-	            .u_kind(user.getU_kind())
-	            .name(user.getName())
-	            .gender(user.getGender())
-	            .phone(user.getPhone())
-	            .addr(user.getAddr())
-	            .birth(user.getBirth())
-	            .text(user.getText())
-	            .createdAt(user.getCreatedAt())
-	            .appms(user.getAppms().stream()
-	                    .map(appm -> new AppointmentDto(
-	                            appm.getA_id(),
-	                            appm.getA_date(),
-	                            appm.getA_content(),
-	                            appm.getA_dia_name(),
-	                            appm.getA_dia_content()))
-	                    .toList())
-	            .build();
+	@GetMapping("/api/appmUser")
+	public List<H_AppmUserDto> getAppmWithUserList() {
+		List<User> users = hRepo.findAppmWithUser();
+		return users.stream()
+				.map(u -> H_AppmUserDto
+						.builder()
+						.id(u.getId())
+						.u_kind(u.getU_kind())
+						.name(u.getName())
+						.gender(u.getGender())
+						.phone(u.getPhone())
+						.addr(u.getAddr())
+						.birth(u.getBirth())
+						.text(u.getText())
+						.createdAt(u.getCreatedAt())
+						.appms(u.getAppms().stream()
+								.map(appm -> new AppointmentDto(
+										appm.getA_id(), 
+										appm.getA_date(), 
+										appm.getA_content(), 
+										appm.getA_dia_name(), 
+										appm.getA_dia_content()))
+								.toList())
+						.build())
+				.toList();
 	}
 	
 	@GetMapping("/api/like")

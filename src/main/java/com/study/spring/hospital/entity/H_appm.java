@@ -39,7 +39,7 @@ public class H_appm {
 	@JoinColumn(name="a_user_id")
 	private User h_user;
 	
-	private String a_date;
+	private LocalDate a_date;
 	private String a_content;
 	private String a_del_yn;
 	private String a_dia_name;
