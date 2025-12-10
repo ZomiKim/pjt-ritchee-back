@@ -21,19 +21,22 @@ import com.study.spring.hospital.dto.H_ReviewUserDto;
 import com.study.spring.hospital.dto.HospitalDto;
 import com.study.spring.hospital.dto.LikeDto;
 import com.study.spring.hospital.dto.ReservationDto;
-
+<<<<<<< HEAD
 import com.study.spring.hospital.dto.ReviewCreateDto;
-
+=======
+>>>>>>> origin/feature/jhr88
 import com.study.spring.hospital.dto.ReviewDto;
 import com.study.spring.hospital.entity.H_appm;
 import com.study.spring.hospital.entity.H_review;
 import com.study.spring.hospital.entity.Hospital;
 import com.study.spring.hospital.repository.HospitalAppmRepository;
-
+<<<<<<< HEAD
 import com.study.spring.hospital.repository.HospitalCommentRepository;
 import com.study.spring.hospital.repository.HospitalRepository;
 import com.study.spring.hospital.repository.HospitalReviewRepository;
-
+=======
+import com.study.spring.hospital.repository.HospitalRepository;
+>>>>>>> origin/feature/jhr88
 import com.study.spring.user.entity.User;
 import com.study.spring.user.repository.UserRepository;
 
@@ -45,13 +48,15 @@ public class HospitalService {
 	UserRepository uRepo;
 	@Autowired
 	HospitalAppmRepository aRepo;
-
+<<<<<<< HEAD
 	@Autowired
 	HospitalCommentRepository cRepo;
 	@Autowired
 	HospitalReviewRepository rRepo;
 	
-
+	
+=======
+>>>>>>> origin/feature/jhr88
 
 	public List<HospitalDto> findAllHospitalByIdDesc() {
 		return hRepo.findAllHospitalByIdDesc();
@@ -83,7 +88,8 @@ public class HospitalService {
 				.toList();
 	}
 
-
+<<<<<<< HEAD
+=======
 	public H_ReviewListDto findWithReviews(String h_code) {
 		Hospital h = hRepo.findWithReviews(h_code);
 
@@ -107,6 +113,7 @@ public class HospitalService {
 	            .build();
 	}
 
+>>>>>>> origin/feature/jhr88
 	public List<H_ReviewUserDto> findReviewWithUser() {
 		List<User> users = hRepo.findReviewWithUser();
 		return users.stream()
@@ -278,7 +285,7 @@ public class HospitalService {
 				.toList();
 	}
 
-
+<<<<<<< HEAD
 	public void reviewCreate(ReviewCreateDto req) {
 		Hospital hospital = hRepo.findById(req.getH_code())
 	            .orElseThrow(() -> new RuntimeException("Hospital not Found"));
@@ -303,5 +310,6 @@ public class HospitalService {
 	    rRepo.save(review);
 
 	}
-
+=======
+>>>>>>> origin/feature/jhr88
 }

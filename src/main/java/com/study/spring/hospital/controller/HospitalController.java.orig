@@ -74,6 +74,7 @@ public class HospitalController {
 		return hService.findWithReivew();
 	}
 	
+<<<<<<< HEAD
 	// 예약한 병원 리뷰 작성
 	@PostMapping("/api/review")
 	public ResponseEntity<String> reviewCreate(@RequestBody ReviewCreateDto req) {
@@ -83,14 +84,14 @@ public class HospitalController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Review FAILURE: " + e.getMessage());
 		}
-
+=======
 	
 	@GetMapping("/api/review/{h_code}")
 	public H_ReviewListDto getOneOfHospitalReviewList(
 	        @PathVariable("h_code") String h_code) {
 
 	    return hService.findWithReviews(h_code);
-
+>>>>>>> origin/feature/jhr88
 	}
 	
 	// 유저별 작성한 리뷰 리스트
