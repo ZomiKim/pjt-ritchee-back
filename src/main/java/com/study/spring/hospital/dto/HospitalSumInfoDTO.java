@@ -9,7 +9,6 @@ public interface HospitalSumInfoDTO {
 		String getH_smpl_dgm();
 		String getH_addr();
 		String getH_tel1();
-		String getH_tel2();
 		String getH_long();
 		String getH_lat();
 		String getH_park_yn();
