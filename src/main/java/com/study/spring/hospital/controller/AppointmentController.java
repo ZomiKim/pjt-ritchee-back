@@ -14,7 +14,7 @@ import com.study.spring.hospital.dto.AppointmentFullDto;
 import com.study.spring.hospital.entity.H_appm;
 import com.study.spring.hospital.repository.AppointmentRepository;
 
-@RestController
+@RestController("hospitalAppointmentController")
 @RequestMapping("/api")
 public class AppointmentController {
 

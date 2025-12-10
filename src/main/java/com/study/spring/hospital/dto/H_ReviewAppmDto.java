@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class H_ReviewAppmDto {
 	private int a_id;

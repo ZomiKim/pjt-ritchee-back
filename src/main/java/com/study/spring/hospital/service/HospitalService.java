@@ -304,4 +304,30 @@ public class HospitalService {
 
 	}
 
+	public List<H_AppmUserDto> findAppmWithUser() {
+		List<User> users = hRepo.findAppmWithUser();
+		return users.stream()
+				.map(u -> H_AppmUserDto
+						.builder()
+						.id(u.getId())
+						.u_kind(u.getU_kind())
+						.name(u.getName())
+						.gender(u.getGender())
+						.phone(u.getPhone())
+						.addr(u.getAddr())
+						.birth(u.getBirth())
+						.text(u.getText())
+						.createdAt(u.getCreatedAt())
+						.appms(u.getAppms().stream()
+								.map(appm -> new AppointmentDto(
+										appm.getA_id(), 
+										appm.getA_date(), 
+										appm.getA_content(), 
+										appm.getA_dia_name(), 
+										appm.getA_dia_content()))
+								.toList())
+						.build())
+				.toList();
+	}
+
 }
