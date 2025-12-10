@@ -1,5 +1,6 @@
 package com.study.spring.hospital.controller;
 
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,9 +12,8 @@ import com.study.spring.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.RestController;
-import com.study.spring.HospitalApplication;
-import com.study.spring.config.WebCorsConfig;
 import com.study.spring.hospital.dto.AppointmentDto;
 import com.study.spring.hospital.dto.CommentDto;
 import com.study.spring.hospital.dto.H_AppmListDto;
@@ -25,12 +25,12 @@ import com.study.spring.hospital.dto.H_ReviewCommentDto;
 import com.study.spring.hospital.dto.H_ReviewLikeDto;
 import com.study.spring.hospital.dto.HospitalDto;
 import com.study.spring.hospital.dto.LikeDto;
+
 import com.study.spring.hospital.dto.ReservationDto;
 import com.study.spring.hospital.dto.ReviewCreateDto;
 import com.study.spring.hospital.dto.H_ReviewListDto;
 import com.study.spring.hospital.dto.H_ReviewUserDto;
 import com.study.spring.hospital.dto.ReviewDto;
-import com.study.spring.hospital.entity.H_appm;
 import com.study.spring.hospital.entity.H_review;
 import com.study.spring.hospital.entity.Hospital;
 import com.study.spring.hospital.repository.HospitalAppmRepository;
@@ -39,16 +39,13 @@ import com.study.spring.hospital.service.HospitalService;
 import com.study.spring.user.entity.User;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
 public class HospitalController {
 	@Autowired
+
 	HospitalService hService;
 
 	@GetMapping("/")
@@ -85,6 +82,7 @@ public class HospitalController {
 		}
 	}
 	
+
 	@GetMapping("/api/review/{h_code}")
 	public H_ReviewListDto getOneOfHospitalReviewList(
 	        @PathVariable("h_code") String h_code) {
@@ -94,6 +92,7 @@ public class HospitalController {
 	}
 	
 	// 유저별 작성한 리뷰 리스트
+
 	@GetMapping("/api/reviewUser")
 	public List<H_ReviewUserDto> getReviewWithUserList() {
 		return hService.findReviewWithUser();
@@ -117,6 +116,7 @@ public class HospitalController {
 		return hService.findWithAppm();
 	}
 	
+
 	// 특정 병원 예약
 	@PostMapping("/api/appm")
 	public ResponseEntity<String> appmCreate(@RequestBody ReservationDto req) {
@@ -128,12 +128,39 @@ public class HospitalController {
 		} 
 	}
 
-	// 예약 개별 조회
+	
 	
 //	예약 개별 조회
 	@GetMapping("/api/appmUser/{userId}")
 	public H_AppmUserDto getAppmWithUser(@PathVariable("userId") UUID userId) {
 	    return hService.findAppmWithUserById(userId);
+
+	@GetMapping("/api/appmUser")
+	public List<H_AppmUserDto> getAppmWithUserList() {
+		List<User> users = hRepo.findAppmWithUser();
+		return users.stream()
+				.map(u -> H_AppmUserDto
+						.builder()
+						.id(u.getId())
+						.u_kind(u.getU_kind())
+						.name(u.getName())
+						.gender(u.getGender())
+						.phone(u.getPhone())
+						.addr(u.getAddr())
+						.birth(u.getBirth())
+						.text(u.getText())
+						.createdAt(u.getCreatedAt())
+						.appms(u.getAppms().stream()
+								.map(appm -> new AppointmentDto(
+										appm.getA_id(), 
+										appm.getA_date(), 
+										appm.getA_content(), 
+										appm.getA_dia_name(), 
+										appm.getA_dia_content()))
+								.toList())
+						.build())
+				.toList();
+
 	}
 	
 	// 리뷰별 좋아요 리스트
