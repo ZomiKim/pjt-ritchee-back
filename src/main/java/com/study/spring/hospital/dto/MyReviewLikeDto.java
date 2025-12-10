@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import com.study.spring.hospital.entity.H_review;
 
 public class MyReviewLikeDto {
-    private int r_id;
+    private Integer r_id;
     private String r_title;
     private Integer r_eval_pt;
     private Integer r_views;

@@ -29,11 +29,11 @@ public class MyReviewService {
                 List<MyReviewLikeDto> reviewDtos = new ArrayList<>();
                 for (Object[] row : rawResults) {
                     H_review review = H_review.builder()
-                            .r_id((Integer) row[0])
+                    		.r_id(((Number) row[0]).intValue())
                             .r_title((String) row[4])
                             .r_content((String) row[5])
-                            .r_eval_pt((Integer) row[6])
-                            .r_views((Integer) row[7])
+                            .r_eval_pt(((Number) row[6]).intValue())
+                            .r_views(((Number) row[7]).intValue())
                             .r_del_yn((String) row[8])
                             .build();
 

@@ -83,7 +83,7 @@ public class HospitalController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Review FAILURE: " + e.getMessage());
 		}
-
+	}
 	
 	@GetMapping("/api/review/{h_code}")
 	public H_ReviewListDto getOneOfHospitalReviewList(
@@ -117,33 +117,20 @@ public class HospitalController {
 		return hService.findWithAppm();
 	}
 	
-<<<<<<< HEAD
 	// 특정 병원 예약
-=======
->>>>>>> origin/feature/jhr88
 	@PostMapping("/api/appm")
 	public ResponseEntity<String> appmCreate(@RequestBody ReservationDto req) {
 		try {
 			hService.appmCreate(req);
-<<<<<<< HEAD
 			return ResponseEntity.ok("Apponintment SUCCESS");	
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Review FAILURE: " + e.getMessage());
-=======
-			return ResponseEntity.ok("SUCCESS");	
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FAILURE: " + e.getMessage());
->>>>>>> origin/feature/jhr88
-		}
-
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Review FAILURE: " + e.getMessage());	
+		} 
 	}
 
-<<<<<<< HEAD
 	// 예약 개별 조회
-=======
 	
 //	예약 개별 조회
->>>>>>> origin/feature/jhr88
 	@GetMapping("/api/appmUser/{userId}")
 	public H_AppmUserDto getAppmWithUser(@PathVariable("userId") UUID userId) {
 	    return hService.findAppmWithUserById(userId);
