@@ -141,27 +141,27 @@ public class HospitalController {
 				.toList();
 	}
 	
-	@GetMapping("/api/comment")
-	public List<H_ReviewCommentDto> getCommentList() {
-		List<H_review> reviews = hRepo.findWithComment();
-		return reviews.stream()
-				.map(r-> H_ReviewCommentDto
-						.builder()
-						.r_id(r.getR_id())
-						.r_title(r.getR_title())
-						.r_content(r.getR_content())
-						.r_eval_pt(r.getR_eval_pt())
-						.r_views(r.getR_views())
-						.createdAt(r.getCreatedAt())
-						.commentCount(r.getComments().size()) // getComments는 엔티티에서 가져오는 네임
-						.comments(r.getComments().stream() // .comments는 dto에서 가져오는 네임
-								.map(comment -> new CommentDto(
-										comment.getC_id(), 
-										comment.getC_content()))
-								.toList())
-						.build())
-				.toList();
-	}
+//	@GetMapping("/api/comment")
+//	public List<H_ReviewCommentDto> getCommentList() {
+//		List<H_review> reviews = hRepo.findWithComment();
+//		return reviews.stream()
+//				.map(r-> H_ReviewCommentDto
+//						.builder()
+//						.r_id(r.getR_id())
+//						.r_title(r.getR_title())
+//						.r_content(r.getR_content())
+//						.r_eval_pt(r.getR_eval_pt())
+//						.r_views(r.getR_views())
+//						.createdAt(r.getCreatedAt())
+//						.commentCount(r.getComments().size()) // getComments는 엔티티에서 가져오는 네임
+//						.comments(r.getComments().stream() // .comments는 dto에서 가져오는 네임
+//								.map(comment -> new CommentDto(
+//										comment.getC_id(), 
+//										comment.getC_content()))
+//								.toList())
+//						.build())
+//				.toList();
+//	}
 	
 	@GetMapping("/api/commentUser")
 	public List<H_CommentUserDto> getCommentWithUserList() {

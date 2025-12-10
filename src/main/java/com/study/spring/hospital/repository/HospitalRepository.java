@@ -12,6 +12,7 @@ import com.study.spring.hospital.dto.H_ReviewAppmDto;
 import com.study.spring.hospital.dto.H_ReviewCommentDto;
 import com.study.spring.hospital.dto.H_ReviewListDto;
 import com.study.spring.hospital.dto.HospitalDto;
+import com.study.spring.hospital.dto.ReviewDto;
 import com.study.spring.hospital.entity.H_review;
 //import com.study.spring.hospital.dto.H_ReviewListDto;
 import com.study.spring.hospital.entity.Hospital;
@@ -67,15 +68,16 @@ public interface HospitalRepository extends JpaRepository<Hospital, String> {
 			order by h.h_code desc
 			""")
 	List<Hospital> findWithReview();
-
+/*
 	@Query("""
 			select r
 			from H_review  r
 			join r.comments
 			order by r.r_id desc
-			""") // r.comments는 엔티티에서 가져오는 네임
-	List<H_review> findWithComment();
-
+			""")
+	r.comments는 엔티티에서 가져오는 네임
+ List<H_review> findWithComment(); */
+	
 	@Query("""
 			select h
 			from Hospital h
@@ -143,7 +145,6 @@ public interface HospitalRepository extends JpaRepository<Hospital, String> {
 			""")
 	List<User> findLikeWithUser();
 
-
 	@Query("""
 			select h
 			from Hospital h
@@ -155,4 +156,5 @@ public interface HospitalRepository extends JpaRepository<Hospital, String> {
 
 	@Query("SELECT u FROM User u LEFT JOIN FETCH u.appms WHERE u.id = :id")
 	User findAppmWithUserById(@Param("id") UUID id);
+	
 }
