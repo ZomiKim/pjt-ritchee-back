@@ -216,35 +216,6 @@ public class HospitalService {
 	            .build();
 	    aRepo.save(appm);
 	}
-
-//	public H_AppmUserDto findAppmWithUserById(UUID userId, String h_code) {
-//		// 유저 + 예약 정보 포함 조회 (UserRepository에 해당 메소드가 있어야 함)
-//	    User user = hRepo.findAppmWithUserById(userId, h_code);
-//
-//
-//	    return H_AppmUserDto.builder()
-//	            .id(user.getId())
-//	            .u_kind(user.getU_kind())
-//	            .name(user.getName())
-//	            .gender(user.getGender())
-//	            .phone(user.getPhone())
-//	            .addr(user.getAddr())
-//	            .birth(user.getBirth())
-//	            .text(user.getText())
-//	            .createdAt(user.getCreatedAt())
-//	            .appms(user.getAppms().stream()
-//	                    .map(appm -> {
-//	                    	System.out.println("출력합시다!!" + appm.getA_date());
-//	                    	return new AppointmentDto(
-//		                            appm.getA_id(),
-//		                            appm.getA_date(),
-//		                            appm.getA_content(),
-//		                            appm.getA_dia_name(),
-//		                            appm.getA_dia_content());
-//	                    })
-//	                    .toList())
-//	            .build();
-//	}
 	
 	public H_AppmUserHospitalDto findAppmWithUserById(UUID userId, String h_code) {
 		// 유저 + 예약 정보 포함 조회 (UserRepository에 해당 메소드가 있어야 함)

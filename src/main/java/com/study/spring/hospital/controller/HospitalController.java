@@ -136,11 +136,6 @@ public class HospitalController {
 	
 	
 //	예약 개별 조회
-//	@GetMapping("/api/appmUser/{userId}/hCode/{h_code}")
-//	public H_AppmUserDto getAppmWithUser(@PathVariable("userId") UUID userId, @PathVariable("h_code") String h_code) {
-//	    return hService.findAppmWithUserById(userId, h_code);
-//	}
-	
 	@GetMapping("/api/appmUser/{userId}/hCode/{h_code}")
 	public H_AppmUserHospitalDto getAppmWithUser(@PathVariable("userId") UUID userId, @PathVariable("h_code") String h_code) {
 	    return hService.findAppmWithUserById(userId, h_code);
