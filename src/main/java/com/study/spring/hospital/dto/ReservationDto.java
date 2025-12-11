@@ -1,7 +1,10 @@
 package com.study.spring.hospital.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +17,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ReservationDto {
 	public String h_code;
-	public LocalDate a_date;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+	public LocalDateTime a_date;
 	public String a_content;
 	public UUID a_user_id;
 	public String a_del_yn;

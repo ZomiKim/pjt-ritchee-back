@@ -2,16 +2,17 @@ package com.study.spring.hospital.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class H_MyReviewCommentDto {
 	private int r_id;
 	private String r_title;

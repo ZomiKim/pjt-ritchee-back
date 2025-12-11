@@ -27,7 +27,9 @@ public class CommentController {
 						.map(comment -> new MyCommentDto(
 								reviewId,
 								comment.getH_user() != null ? comment.getH_user().getId() : null,
-								comment.getC_content()))
+								comment.getC_content(),
+								comment.getH_user() != null ? comment.getH_user().getName() : null,
+								comment.getCreatedAt()))
 						.toList())
 				.build();
 	}

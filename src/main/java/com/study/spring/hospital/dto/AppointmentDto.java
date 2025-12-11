@@ -1,6 +1,7 @@
 package com.study.spring.hospital.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AppointmentDto {
 	private int a_id;
-	private LocalDate a_date;
+	private LocalDateTime a_date;
 	private String a_content;
 	private String a_dia_name;
 	private String a_dia_content;

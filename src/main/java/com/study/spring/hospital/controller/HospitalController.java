@@ -18,6 +18,7 @@ import com.study.spring.hospital.dto.AppointmentDto;
 import com.study.spring.hospital.dto.CommentDto;
 import com.study.spring.hospital.dto.H_AppmListDto;
 import com.study.spring.hospital.dto.H_AppmUserDto;
+import com.study.spring.hospital.dto.H_AppmUserHospitalDto;
 import com.study.spring.hospital.dto.H_CommentUserDto;
 import com.study.spring.hospital.dto.H_LikeUserDto;
 import com.study.spring.hospital.dto.H_ReviewAppmDto;
@@ -135,9 +136,14 @@ public class HospitalController {
 	
 	
 //	예약 개별 조회
-	@GetMapping("/api/appmUser/{userId}")
-	public H_AppmUserDto getAppmWithUser(@PathVariable("userId") UUID userId) {
-	    return hService.findAppmWithUserById(userId);
+//	@GetMapping("/api/appmUser/{userId}/hCode/{h_code}")
+//	public H_AppmUserDto getAppmWithUser(@PathVariable("userId") UUID userId, @PathVariable("h_code") String h_code) {
+//	    return hService.findAppmWithUserById(userId, h_code);
+//	}
+	
+	@GetMapping("/api/appmUser/{userId}/hCode/{h_code}")
+	public H_AppmUserHospitalDto getAppmWithUser(@PathVariable("userId") UUID userId, @PathVariable("h_code") String h_code) {
+	    return hService.findAppmWithUserById(userId, h_code);
 	}
 	
 	@GetMapping("/api/appmUser")

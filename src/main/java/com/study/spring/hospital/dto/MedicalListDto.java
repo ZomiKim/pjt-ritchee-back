@@ -11,7 +11,7 @@ public class MedicalListDto {
 
     private int a_id;
     private String a_content;
-    private LocalDate a_date;
+    private LocalDateTime a_date;
     private String a_del_yn;
     private String a_dia_content;
     private String a_dia_name;
@@ -23,7 +23,7 @@ public class MedicalListDto {
     public MedicalListDto(
             int a_id,
             String a_content,
-            LocalDate a_date,
+            LocalDateTime a_date,
             String a_del_yn,
             String a_dia_content,
             String a_dia_name,

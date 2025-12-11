@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.study.spring.hospital.dto.AppointmentDto;
+import com.study.spring.hospital.dto.AppointmentWithHospitalNameDto;
 import com.study.spring.hospital.dto.CommentDto;
 import com.study.spring.hospital.dto.H_AppmListDto;
 import com.study.spring.hospital.dto.H_AppmUserDto;
+import com.study.spring.hospital.dto.H_AppmUserHospitalDto;
 import com.study.spring.hospital.dto.H_CommentUserDto;
 import com.study.spring.hospital.dto.H_LikeUserDto;
 import com.study.spring.hospital.dto.H_ReviewAppmDto;
@@ -212,16 +214,44 @@ public class HospitalService {
 	            .createdAt(LocalDateTime.now())
 	            .updatedAt(LocalDateTime.now())
 	            .build();
-
 	    aRepo.save(appm);
 	}
 
-	public H_AppmUserDto findAppmWithUserById(UUID userId) {
+//	public H_AppmUserDto findAppmWithUserById(UUID userId, String h_code) {
+//		// 유저 + 예약 정보 포함 조회 (UserRepository에 해당 메소드가 있어야 함)
+//	    User user = hRepo.findAppmWithUserById(userId, h_code);
+//
+//
+//	    return H_AppmUserDto.builder()
+//	            .id(user.getId())
+//	            .u_kind(user.getU_kind())
+//	            .name(user.getName())
+//	            .gender(user.getGender())
+//	            .phone(user.getPhone())
+//	            .addr(user.getAddr())
+//	            .birth(user.getBirth())
+//	            .text(user.getText())
+//	            .createdAt(user.getCreatedAt())
+//	            .appms(user.getAppms().stream()
+//	                    .map(appm -> {
+//	                    	System.out.println("출력합시다!!" + appm.getA_date());
+//	                    	return new AppointmentDto(
+//		                            appm.getA_id(),
+//		                            appm.getA_date(),
+//		                            appm.getA_content(),
+//		                            appm.getA_dia_name(),
+//		                            appm.getA_dia_content());
+//	                    })
+//	                    .toList())
+//	            .build();
+//	}
+	
+	public H_AppmUserHospitalDto findAppmWithUserById(UUID userId, String h_code) {
 		// 유저 + 예약 정보 포함 조회 (UserRepository에 해당 메소드가 있어야 함)
-	    User user = hRepo.findAppmWithUserById(userId);
+	    User user = hRepo.findAppmWithUserById(userId, h_code);
 
 
-	    return H_AppmUserDto.builder()
+	    return H_AppmUserHospitalDto.builder()
 	            .id(user.getId())
 	            .u_kind(user.getU_kind())
 	            .name(user.getName())
@@ -232,12 +262,15 @@ public class HospitalService {
 	            .text(user.getText())
 	            .createdAt(user.getCreatedAt())
 	            .appms(user.getAppms().stream()
-	                    .map(appm -> new AppointmentDto(
-	                            appm.getA_id(),
-	                            appm.getA_date(),
-	                            appm.getA_content(),
-	                            appm.getA_dia_name(),
-	                            appm.getA_dia_content()))
+	                    .map(appm -> {
+	                    	return new AppointmentWithHospitalNameDto(
+		                            appm.getA_id(),
+		                            appm.getA_date(),
+		                            appm.getA_content(),
+		                            appm.getA_dia_name(),
+		                            appm.getA_dia_content(),
+		                            appm.getHospital().getH_name());
+	                    })
 	                    .toList())
 	            .build();
 	}

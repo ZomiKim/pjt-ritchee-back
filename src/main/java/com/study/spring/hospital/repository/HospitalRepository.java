@@ -154,7 +154,13 @@ public interface HospitalRepository extends JpaRepository<Hospital, String> {
 			""")
 	Hospital findWithReviews(@Param("h_code") String h_code);
 
-	@Query("SELECT u FROM User u LEFT JOIN FETCH u.appms WHERE u.id = :id")
-	User findAppmWithUserById(@Param("id") UUID id);
+	@Query("""
+			SELECT u
+			FROM User u 
+			JOIN u.appms a
+			JOIN a.hospital h
+			WHERE u.id = :id AND h.h_code = :h_code
+			""")
+	User findAppmWithUserById(@Param("id") UUID id, @Param("h_code") String h_code);
 
 }

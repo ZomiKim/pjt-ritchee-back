@@ -76,7 +76,7 @@ public class AppointmentController {
         dto.setSymptom(a.getA_content());
         dto.setNote(a.getA_dia_content());
         dto.setDiagnosis(a.getA_dia_name());
-        dto.setDate(a.getA_date());
+//        dto.setDate(a.getA_date());
         dto.setTime(null); // 시간 컬럼이 없으므로 null로 설정
         dto.setPhone(a.getH_user() != null ? a.getH_user().getPhone() : null);
         dto.setAge(a.getH_user() != null ? String.valueOf(a.getH_user().getU_kind()) : null);
