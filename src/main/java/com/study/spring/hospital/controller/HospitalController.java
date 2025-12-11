@@ -85,6 +85,7 @@ public class HospitalController {
 		}
 	}
 	
+	
 
 	@GetMapping("/api/review/{h_code}")
 	public H_ReviewListDto getOneOfHospitalReviewList(

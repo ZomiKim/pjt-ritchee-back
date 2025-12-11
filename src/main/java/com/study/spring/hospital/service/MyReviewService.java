@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.study.spring.hospital.dto.MyReviewLikeDto;
 import com.study.spring.hospital.entity.H_review;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional // update 직후 select를 하는 것처럼 연속적으로 db 작업을 수행하는 경우, db 작업을 묶음 처리 하여 수행하도록 함 
 public class MyReviewService {
     private final MyReviewLikeRepository repo;
 
@@ -23,6 +25,7 @@ public class MyReviewService {
     public List<MyReviewLikeDto> getMyReviews(Integer reviewId) {
         log.info("Searching for review with ID: {}", reviewId);
         try {
+        		repo.increaseViews(reviewId); // 조회수 증가
             // 먼저 Native Query로 시도 (timestamp 제외)
             List<Object[]> rawResults = repo.findMyReviewsByReviewIdRaw(reviewId);
             if (!rawResults.isEmpty()) {

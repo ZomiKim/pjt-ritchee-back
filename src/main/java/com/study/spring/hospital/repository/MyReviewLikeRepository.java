@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -52,4 +53,12 @@ public interface MyReviewLikeRepository extends JpaRepository<H_review, Integer>
 			    WHERE l.r_id = :reviewId
 			""", nativeQuery = true)
 	Long countLikesByReviewId(@Param("reviewId") Integer reviewId);
+
+	@Modifying
+	@Query("""
+			UPDATE H_review r
+			SET r.r_views = r.r_views + 1
+			WHERE r.r_id = :r_id
+			""")
+	void increaseViews(@Param("r_id") Integer reviewId);
 }

@@ -47,7 +47,26 @@ public interface AppointmentRepository extends JpaRepository<H_appm, Integer> {
 	// 12.11 날짜변환 문제로 인해 Native Query로 변경함
     @Query(
             value = """
-                
+                SELECT
+                    a.a_id As a_id,
+                    h.h_code As h_code,
+                    h.h_name As h_name,
+                    a.a_content As a_content,
+                    a.a_dia_name As a_dia_name,
+                    a.a_dia_content As a_dia_content,
+                    TO_CHAR(a.a_date,'YYYY-MM-DD HH24:MI:SS') As a_date,
+                    u.phone  As phone,
+                    u.text As text,
+                    CASE WHEN u.gender = 'M' THEN '남' 
+                         WHEN u.gender = 'F' THEN '여' 
+                         ELSE u.gender END As gender,
+                    EXTRACT(YEAR FROM AGE(CURRENT_DATE, u.birth)) AS Age     
+                FROM h_appm a
+                JOIN hospital h ON a.h_code = h.h_code
+                JOIN h_user u ON a.a_user_id = u.id
+               WHERE a.a_user_id = :userId
+                 AND COALESCE(a.a_del_yn,'N') = 'N'
+               ORDER BY a.a_id DESC
             """,
             countQuery = """
                 SELECT count(a.a_id)
