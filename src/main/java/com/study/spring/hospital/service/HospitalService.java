@@ -284,7 +284,11 @@ public class HospitalService {
 						.createdAt(r.getCreatedAt())
 						.likeCount(r.getLikes().size())
 						.likes(r.getLikes().stream()
-								.map(like -> new LikeDto(like.getL_id()))
+								.map(like -> new LikeDto(
+										like.getL_id(), 
+										like.getH_review().getR_id(), 
+										like.getH_user().getId(), 
+										like.getCreatedAt()))
 								.toList())
 						.build())
 				.toList();
@@ -305,7 +309,10 @@ public class HospitalService {
 						.text(u.getText())
 						.createdAt(u.getCreatedAt())
 						.likes(u.getLikes().stream()
-								.map(like -> new LikeDto(like.getL_id()))
+								.map(like -> new LikeDto(like.getL_id(), 
+										like.getH_review().getR_id(), 
+										like.getH_user().getId(), 
+										like.getCreatedAt()))
 								.toList())
 						.build())
 				.toList();
