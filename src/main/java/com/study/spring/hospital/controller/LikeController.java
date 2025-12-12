@@ -53,6 +53,11 @@ public class LikeController {
 	    return LkRepo.findByLikeUs(h_user_id);
 	}
 	
+	@GetMapping("/api/onelike/{h_user_id}/reviewId/{r_id}")
+	public LikeDto getL(@PathVariable("h_user_id") UUID h_user_id, @PathVariable("r_id") Integer r_id) {
+		return LkRepo.findByLikeUser(h_user_id, r_id);
+	}
+	
 	
 	//유저별 좋아요 포스트 매핑
 	@PostMapping("/api/LikeOne")
@@ -60,7 +65,7 @@ public class LikeController {
 		likeService.Likes(Ldto);
 	}
 	
-	  // 유저별 좋아요 삭제 매핑
+	// 유저별 좋아요 삭제 매핑
     @DeleteMapping("/api/LikeOne")
     public void DLike(@RequestBody LikeDto Ldto) {
         likeService.deleteLike(Ldto);

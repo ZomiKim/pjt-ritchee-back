@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class LikeDto {
-	private int l_id;
-	private int r_id;
+	private Integer l_id;
+	private Integer r_id;
 	private UUID h_user_id;
 	private LocalDateTime created_at;
 }

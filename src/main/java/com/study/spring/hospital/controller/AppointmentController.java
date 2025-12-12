@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.study.spring.hospital.dto.AppointmentFullDto;
+import com.study.spring.hospital.dto.HospitalSumInfoDTO;
 import com.study.spring.hospital.entity.H_appm;
 import com.study.spring.hospital.repository.AppointmentRepository;
 
@@ -150,4 +151,22 @@ public class AppointmentController {
  
 //        return dto;
 //    }
+    
+    // 수정, 삭제용 a_id별 예약내역조회
+    @GetMapping("/api/appminfo")
+    public ResponseEntity<AppointmentFullDto> getUserAppmInfoById(
+    	@RequestParam(name = "a_id") int a_id) {
+
+    	log.info("a_id : " + a_id);
+		Optional<AppointmentFullDto> appmInfo = appointmentRepository.findByAppmInfoById(a_id);
+        if (appmInfo.isEmpty()) {
+        	log.error("findByAppmInfoById({}) 쿼리 결과가 없습니다..", a_id);
+            return ResponseEntity.notFound().build(); 
+        }
+        
+        // 데이터가 존재하면 HTTP 200 OK와 함께 본문(Body)에 데이터 반환
+        log.info("findByAppmInfoById({}) 쿼리 결과 성공: {}", a_id, appmInfo.get());
+        return ResponseEntity.ok(appmInfo.get());
+	    
+    }
 }

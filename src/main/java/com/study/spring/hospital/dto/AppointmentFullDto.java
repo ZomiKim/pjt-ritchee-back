@@ -8,8 +8,10 @@ public interface AppointmentFullDto {
 	String getA_dia_name();
 	String getA_dia_content();
 	String getA_date();
+	String getA_time();
 	String getPhone();
 	String getText();
+	String getU_name();
 	String getGender();
 	String getAge();
 }
@@ -62,4 +64,3 @@ public interface AppointmentFullDto {
 //			this.u_text = u_text;
 //	    }
 //}
-

@@ -1,5 +1,6 @@
 package com.study.spring.hospital.repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -54,9 +55,11 @@ public interface AppointmentRepository extends JpaRepository<H_appm, Integer> {
                     a.a_content As a_content,
                     a.a_dia_name As a_dia_name,
                     a.a_dia_content As a_dia_content,
-                    TO_CHAR(a.a_date,'YYYY-MM-DD HH24:MI:SS') As a_date,
+                    TO_CHAR(a.a_date,'YYYY-MM-DD') As a_date,
+                    TO_CHAR(a.a_date,'HH24:MI') As a_time,
                     u.phone  As phone,
                     u.text As text,
+                    u.name As u_name,
                     CASE WHEN u.gender = 'M' THEN '남' 
                          WHEN u.gender = 'F' THEN '여' 
                          ELSE u.gender END As gender,
@@ -84,4 +87,33 @@ public interface AppointmentRepository extends JpaRepository<H_appm, Integer> {
     @Modifying
     @Query("UPDATE H_appm a SET a.a_del_yn = 'Y' WHERE a.a_id = :aId")
     void softDelete(@Param("aId") int aId);
+    
+    // 예약 내역 수정삭제를 위한 예약정보조회
+    @Query(value = 
+    		"""
+    		 SELECT
+                    a.a_id As a_id,
+                    h.h_code As h_code,
+                    h.h_name As h_name,
+                    a.a_content As a_content,
+                    a.a_dia_name As a_dia_name,
+                    a.a_dia_content As a_dia_content,
+                    TO_CHAR(a.a_date,'YYYY-MM-DD') As a_date,
+                    TO_CHAR(a.a_date,'HH24:MI') As a_time,
+                    u.phone  As phone,
+                    u.text As text,
+                    u.name As u_name,
+                    CASE WHEN u.gender = 'M' THEN '남' 
+                         WHEN u.gender = 'F' THEN '여' 
+                         ELSE u.gender END As gender,
+                    EXTRACT(YEAR FROM AGE(CURRENT_DATE, u.birth)) AS Age     
+                FROM h_appm a
+                JOIN hospital h ON a.h_code = h.h_code
+                JOIN h_user u ON a.a_user_id = u.id
+               WHERE a.a_id = :a_id
+                 AND COALESCE(a.a_del_yn,'N') = 'N'
+    		""",
+    		nativeQuery = true // 네이티브 SQL 사용 설정   		
+    		)
+	Optional<AppointmentFullDto> findByAppmInfoById(@Param("a_id") int a_id);
 }

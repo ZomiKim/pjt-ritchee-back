@@ -68,4 +68,16 @@ public interface LikeRepository extends JpaRepository<H_like, Integer> {
 	@Query("DELETE FROM H_like l WHERE l.h_review.r_id = :rId AND l.h_user.id = :userId")
 	void deleteLike(@Param("rId") int rId, @Param("userId") UUID userId);
 
+	@Query("""
+			select new com.study.spring.hospital.dto.LikeDto(
+			    l.l_id,
+			    l.h_review.r_id,
+			    l.h_user.id,
+			    l.createdAt
+			)
+			from H_like l
+			where l.h_user.id = :userId and l.h_review.r_id = :r_id
+			""")
+	LikeDto findByLikeUser(@Param("userId") UUID h_user_id, @Param("r_id") Integer r_id);
+
 }
