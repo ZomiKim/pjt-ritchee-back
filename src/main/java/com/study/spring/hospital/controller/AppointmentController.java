@@ -56,7 +56,20 @@ public class AppointmentController {
         // Page<H_appm> -> Page<AppointmentFullDto>
         return appointmentsPage;
     }
-
+    
+    // 병원별 예약 리스트 (hospitalController에 있는 api와의 차이점 : 유저 정보 추가)
+    @GetMapping("/api/appmListOfHospital")
+    public Page<AppointmentFullDto> getHospitalAppointments(
+    		@RequestParam("a_user_id") UUID a_user_id,
+    		@RequestParam(name = "page", defaultValue = "0") int page,
+        	@RequestParam(name = "size", defaultValue = "10") int size) {
+    		
+    		Pageable pageable = PageRequest.of(page, size);
+    		Page<AppointmentFullDto> appointmentsPage = appointmentRepository.findByUserIdAndCode(a_user_id , pageable);
+    	
+			return appointmentsPage;
+    	
+    }
 
 
     // 예약 업데이트
@@ -121,6 +134,34 @@ public class AppointmentController {
                                .body("예약 ID " + a_id + "를 찾을수 없습니다.");
       }
     }
+    
+    // 소견서 작성
+    @PutMapping("/api/appmlist/opinionUpdate/{a_id}")
+    public ResponseEntity<String> updateOpinion(
+          @PathVariable("a_id") int a_id,
+          @RequestParam("a_dia_name") String a_dia_name,
+          @RequestParam("a_dia_content") String a_dia_content) {
+
+
+      Optional<H_appm> appointmentOpt = appointmentRepository.findById(a_id);
+
+      if (appointmentOpt.isPresent()) {
+          H_appm existingAppointment = appointmentOpt.get();
+          // 나머지 필드 업데이트
+          existingAppointment.setA_dia_name(a_dia_name);
+          existingAppointment.setA_dia_content(a_dia_content);
+          
+          // DB 저장 (@PreUpdate가 updatedAt 갱신)
+          appointmentRepository.save(existingAppointment);
+
+          return ResponseEntity.ok("예약 ID " + a_id + "예약내역 수정완료.");
+          
+      } else {
+          return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                               .body("예약 ID " + a_id + "를 찾을수 없습니다.");
+      }
+    }
+    
   
     // 예약 취소
     @PutMapping("/api/appmlist/delete/{a_id}")

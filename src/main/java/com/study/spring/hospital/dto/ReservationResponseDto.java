@@ -1,6 +1,5 @@
 package com.study.spring.hospital.dto;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -15,7 +14,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReservationDto {
+public class ReservationResponseDto {
+	private Integer a_id; // DB에서 생성된 값
 	public String h_code;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	public LocalDateTime a_date;

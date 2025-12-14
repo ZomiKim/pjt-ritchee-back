@@ -53,6 +53,7 @@ public class LikeController {
 	    return LkRepo.findByLikeUs(h_user_id);
 	}
 	
+	// 유저의 리뷰 좋아요 여부 확인
 	@GetMapping("/api/onelike/{h_user_id}/reviewId/{r_id}")
 	public LikeDto getL(@PathVariable("h_user_id") UUID h_user_id, @PathVariable("r_id") Integer r_id) {
 		return LkRepo.findByLikeUser(h_user_id, r_id);

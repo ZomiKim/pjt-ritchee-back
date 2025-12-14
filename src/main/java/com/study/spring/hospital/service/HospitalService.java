@@ -1,6 +1,7 @@
 package com.study.spring.hospital.service;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,7 +13,7 @@ import com.study.spring.hospital.dto.AppointmentWithHospitalNameDto;
 import com.study.spring.hospital.dto.CommentDto;
 import com.study.spring.hospital.dto.H_AppmListDto;
 import com.study.spring.hospital.dto.H_AppmUserDto;
-import com.study.spring.hospital.dto.H_AppmUserHospitalDto;
+import com.study.spring.hospital.dto.H_AppmUserHosDto;
 import com.study.spring.hospital.dto.H_CommentUserDto;
 import com.study.spring.hospital.dto.H_LikeUserDto;
 import com.study.spring.hospital.dto.H_ReviewAppmDto;
@@ -23,7 +24,7 @@ import com.study.spring.hospital.dto.H_ReviewUserDto;
 import com.study.spring.hospital.dto.HospitalDto;
 import com.study.spring.hospital.dto.LikeDto;
 import com.study.spring.hospital.dto.ReservationDto;
-
+import com.study.spring.hospital.dto.ReservationResponseDto;
 import com.study.spring.hospital.dto.ReviewCreateDto;
 
 import com.study.spring.hospital.dto.ReviewDto;
@@ -197,8 +198,8 @@ public class HospitalService {
 						.build())
 				.toList();
 	}
-
-	public void appmCreate(ReservationDto req) {
+	
+	public Integer appmCreate(ReservationDto req) {
 		Hospital hospital = hRepo.findById(req.getH_code())
 	            .orElseThrow(() -> new RuntimeException("Hospital not Found"));
 
@@ -211,18 +212,22 @@ public class HospitalService {
 	            .a_date(req.getA_date())
 	            .a_content(req.getA_content())
 	            .a_del_yn(req.getA_del_yn())
-	            .createdAt(LocalDateTime.now())
-	            .updatedAt(LocalDateTime.now())
 	            .build();
-	    aRepo.save(appm);
+	    H_appm saved = aRepo.save(appm);
+	    return saved.getA_id();
 	}
-	
-	public H_AppmUserHospitalDto findAppmWithUserById(UUID userId, String h_code) {
-		// 유저 + 예약 정보 포함 조회 (UserRepository에 해당 메소드가 있어야 함)
-	    User user = hRepo.findAppmWithUserById(userId, h_code);
 
+	public H_AppmUserHosDto findAppmWithUserById(Integer a_id, UUID userId) {
+	    H_appm appm = hRepo.findAppmWithUserById(a_id, userId);
+	    if (appm == null) throw new RuntimeException("예약 정보를 찾을 수 없습니다.");
 
-	    return H_AppmUserHospitalDto.builder()
+	    User user = appm.getH_user();
+	    if (user == null) throw new RuntimeException("예약한 유저 정보를 찾을 수 없습니다.");
+
+	    Hospital hospital = appm.getHospital();
+	    if (hospital == null) throw new RuntimeException("병원 정보를 찾을 수 없습니다.");
+
+	    return H_AppmUserHosDto.builder()
 	            .id(user.getId())
 	            .u_kind(user.getU_kind())
 	            .name(user.getName())
@@ -231,20 +236,15 @@ public class HospitalService {
 	            .addr(user.getAddr())
 	            .birth(user.getBirth())
 	            .text(user.getText())
-	            .createdAt(user.getCreatedAt())
-	            .appms(user.getAppms().stream()
-	                    .map(appm -> {
-	                    	return new AppointmentWithHospitalNameDto(
-		                            appm.getA_id(),
-		                            appm.getA_date(),
-		                            appm.getA_content(),
-		                            appm.getA_dia_name(),
-		                            appm.getA_dia_content(),
-		                            appm.getHospital().getH_name());
-	                    })
-	                    .toList())
+	            .a_id(appm.getA_id())
+	            .a_date(appm.getA_date())
+	            .a_content(appm.getA_content())
+	            .a_dia_name(appm.getA_dia_name())
+	            .a_dia_content(appm.getA_dia_content())
+	            .h_name(hospital.getH_name())
 	            .build();
 	}
+
 
 	public List<H_ReviewLikeDto> findWithLike() {
 		List<H_review> reviews = hRepo.findWithLike();
@@ -340,4 +340,11 @@ public class HospitalService {
 				.toList();
 	}
 
+	public String getAble(String h_code, LocalTime time) {
+		return hRepo.getAble(h_code, time);
+	}
+
+	public AppointmentDto findById(Integer a_id) {
+		return hRepo.findById(a_id);
+	}
 }

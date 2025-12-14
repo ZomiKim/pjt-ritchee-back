@@ -8,11 +8,10 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
 @Data
 @AllArgsConstructor
 @Builder
-public class H_AppmUserHospitalDto {
+public class H_AppmUserHosDto {
 	private UUID id;
 	private String u_kind;
 	private String name;
@@ -21,6 +20,10 @@ public class H_AppmUserHospitalDto {
 	private String addr;
 	private LocalDate birth;
 	private String text;
-	private List<AppointmentWithHospitalNameDto> appms;
-	private LocalDateTime createdAt;
+	private int a_id;
+	private LocalDateTime a_date;
+	private String a_content;
+	private String a_dia_name;
+	private String a_dia_content;
+	private String h_name;
 }

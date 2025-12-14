@@ -1,5 +1,6 @@
 package com.study.spring.hospital.repository;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,11 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.study.spring.hospital.dto.AppointmentDto;
 import com.study.spring.hospital.dto.H_ReviewAppmDto;
 import com.study.spring.hospital.dto.H_ReviewCommentDto;
 import com.study.spring.hospital.dto.H_ReviewListDto;
 import com.study.spring.hospital.dto.HospitalDto;
 import com.study.spring.hospital.dto.ReviewDto;
+import com.study.spring.hospital.entity.H_appm;
 import com.study.spring.hospital.entity.H_review;
 //import com.study.spring.hospital.dto.H_ReviewListDto;
 import com.study.spring.hospital.entity.Hospital;
@@ -75,7 +78,7 @@ public interface HospitalRepository extends JpaRepository<Hospital, String> {
 //			join r.comments
 //			order by r.r_id desc
 //			""")
-////	r.comments는 엔티티에서 가져오는 네임
+//	r.comments는 엔티티에서 가져오는 네임
 //	List<H_review> findWithComment();
 
 	@Query("""
@@ -155,12 +158,53 @@ public interface HospitalRepository extends JpaRepository<Hospital, String> {
 	Hospital findWithReviews(@Param("h_code") String h_code);
 
 	@Query("""
-			SELECT u
-			FROM User u 
-			JOIN u.appms a
-			JOIN a.hospital h
-			WHERE u.id = :id AND h.h_code = :h_code
+			SELECT a, u, h
+			FROM H_appm a
+			JOIN h_user u
+			JOIN hospital h
+			WHERE u.id = :userId AND a.a_id = :a_id
 			""")
-	User findAppmWithUserById(@Param("id") UUID id, @Param("h_code") String h_code);
+	H_appm findAppmWithUserById(@Param("a_id") Integer a_id, @Param("userId") UUID userId);
 
+	@Query(value = """
+			SELECT
+			    CASE
+			        WHEN r_able_yn = 'TRUE'
+			         AND r_lun_yn  = 'TRUE'
+			        THEN 'Y'
+			        ELSE 'N'
+			    END AS tf
+			FROM (
+			    SELECT
+			        h_mon_s,
+			        h_mon_c,
+			        CASE
+			            WHEN :time BETWEEN h_mon_s AND h_mon_c
+			            THEN 'TRUE'
+			            ELSE 'FALSE'
+			        END AS r_able_yn,
+			        CASE
+			            WHEN :time BETWEEN h_lun_s AND h_lun_c
+			            THEN 'FALSE'
+			            ELSE 'TRUE'
+			        END AS r_lun_yn
+			    FROM hospital_s
+			    WHERE h_code = :h_code)
+
+			""",
+			nativeQuery = true)
+	String getAble(@Param("h_code") String h_code, @Param("time") LocalTime time);
+
+	@Query("""
+			select new com.study.spring.hospital.dto.AppointmentDto(
+				a.a_id,
+				a.a_date,
+				a.a_content,
+				a.a_dia_name,
+				a.a_dia_content
+			)
+			from H_appm a
+			where a.a_id = :a_id
+			""")
+	AppointmentDto findById(@Param("a_id") Integer a_id);
 }
