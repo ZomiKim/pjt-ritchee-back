@@ -1,5 +1,7 @@
 package com.study.spring.hospital.dto;
 
+import java.util.UUID;
+
 public interface AppointmentFullDto {
 	Long getA_id();
 	String getH_code();
@@ -14,6 +16,9 @@ public interface AppointmentFullDto {
 	String getU_name();
 	String getGender();
 	String getAge();
+	String getUser_ukind();
+	String getStaff_ukind();
+	UUID getU_id();
 }
 
 //@Data

@@ -114,4 +114,36 @@ public class HospitalSumService {
         );
 	}
 
+	public Page<HospitalSumDTO> getHospitalSumByReviewAndTopListFindPara1(Pageable pageable, String para1, String para2,
+			String para3) {
+		// 검색 조건이 비어있으면 NULL로 변환하여 DB 쿼리에서 무시되도록 처리
+        // 검색 조건이 비어있으면 NULL로 변환하여 DB 쿼리에서 무시되도록 처리
+        String para1Param = StringUtils.hasText(para1) ? para1 : null;
+        String para2Param = StringUtils.hasText(para2) ? para2 : null;
+        String para3Param = StringUtils.hasText(para3) ? para3 : null;
+
+        return hospitalSumRepo.findHospitalSumByReviewAndTopListFindPara1(
+                pageable,
+                para1Param,
+                para2Param,
+                para3Param
+        );
+	}
+
+	public Page<HospitalSumDTO> getHospitalSumByCommentAndTopListFindPara1(Pageable pageable, String para1,
+			String para2, String para3) {
+		// 검색 조건이 비어있으면 NULL로 변환하여 DB 쿼리에서 무시되도록 처리
+        // 검색 조건이 비어있으면 NULL로 변환하여 DB 쿼리에서 무시되도록 처리
+        String para1Param = StringUtils.hasText(para1) ? para1 : null;
+        String para2Param = StringUtils.hasText(para2) ? para2 : null;
+        String para3Param = StringUtils.hasText(para3) ? para3 : null;
+
+        return hospitalSumRepo.findHospitalSumByCommentAndTopListFindPara1(
+                pageable,
+                para1Param,
+                para2Param,
+                para3Param
+        );
+	}
+
 }

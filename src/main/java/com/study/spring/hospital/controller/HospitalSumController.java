@@ -207,5 +207,56 @@ public class HospitalSumController {
 	        return ResponseEntity.ok(summaryPage); // 결과가 있을 경우 200 OK와 데이터 반환
 	    }
 	
+	
+	@GetMapping("/api/hs_review_find_para")
+	public ResponseEntity<Page<HospitalSumDTO>> getHospitalSumByReviewAndTopListFindPara1(
+	            @RequestParam(name="page", defaultValue = "0") int page,
+	            @RequestParam(name="size", defaultValue = "5") int size,
+	            /* === 추가된 검색 파라미터 === */
+	            @RequestParam(name="para1", required = false) String para1,
+	            @RequestParam(name="para2", required = false) String para2,
+	            @RequestParam(name="para3", required = false) String para3
+				){
+			Pageable pageable = PageRequest.of(page, size);
+
+	        // 수정된 Service 메소드 호출 (검색 조건 전달)
+	        Page<HospitalSumDTO> summaryPage = HSservice.getHospitalSumByReviewAndTopListFindPara1(
+	                pageable, 
+	                para1, 
+	                para2, 
+	                para3
+	        );
+	        
+	        if (summaryPage.isEmpty()) {
+	            return ResponseEntity.noContent().build(); // 결과가 없을 경우 204 No Content 반환
+	        }
+	            
+	        return ResponseEntity.ok(summaryPage); // 결과가 있을 경우 200 OK와 데이터 반환
+    }
+	@GetMapping("/api/hs_comment_find_para")
+	public ResponseEntity<Page<HospitalSumDTO>> getHospitalSumByCommentAndTopListFindPara1(
+			@RequestParam(name="page", defaultValue = "0") int page,
+			@RequestParam(name="size", defaultValue = "5") int size,
+			/* === 추가된 검색 파라미터 === */
+			@RequestParam(name="para1", required = false) String para1,
+			@RequestParam(name="para2", required = false) String para2,
+			@RequestParam(name="para3", required = false) String para3
+			){
+		Pageable pageable = PageRequest.of(page, size);
+		
+		// 수정된 Service 메소드 호출 (검색 조건 전달)
+		Page<HospitalSumDTO> summaryPage = HSservice.getHospitalSumByCommentAndTopListFindPara1(
+				pageable, 
+				para1, 
+				para2, 
+				para3
+				);
+		
+		if (summaryPage.isEmpty()) {
+			return ResponseEntity.noContent().build(); // 결과가 없을 경우 204 No Content 반환
+		}
+		
+		return ResponseEntity.ok(summaryPage); // 결과가 있을 경우 200 OK와 데이터 반환
+	}
 		
 }

@@ -70,7 +70,23 @@ public class AppointmentController {
 			return appointmentsPage;
     	
     }
-
+    
+    // 병원별, 사용자별 예약 리스트 (hospitalController에 있는 api와의 차이점 : 유저 정보 추가)
+    @GetMapping("/api/appmListOfUser")
+    public Page<AppointmentFullDto> getHospitalAppointmentsById(
+    		@RequestParam("h_code") String h_code,
+    		@RequestParam("a_user_id") UUID a_user_id,
+    		@RequestParam(name = "page", defaultValue = "0") int page,
+        	@RequestParam(name = "size", defaultValue = "10") int size) {
+    		
+    		Pageable pageable = PageRequest.of(page, size);
+    		Page<AppointmentFullDto> appointmentsPage = appointmentRepository.findByUserIdAndHcode(h_code,a_user_id , pageable);
+    	
+			return appointmentsPage;
+    	
+    }
+    
+    // 유저별 진료 리스트
 
     // 예약 업데이트
 //    @PutMapping("/api/appointment/update/{a_id}")

@@ -291,6 +291,108 @@ public interface HospitalSumRepository extends JpaRepository<Hospital, String>{
 		            @Param("para1") String para1,
 		            @Param("para2") String para2,
 		            @Param("para3") String para3);
-		    
 
+	 @Query(value = """
+		        SELECT H.h_code AS h_code, 
+		               H.h_name AS h_name, 
+		               MAX(H.h_addr) AS h_addr,
+		               MAX(H.h_tel1) AS h_tel1,
+		               MAX(COALESCE(h_tel2, '010-0000-0000')) AS h_tel2,
+		               MAX(CASE WHEN H.h_park_yn = 'Y' THEN '주차가능' ELSE '주차불가' END ) AS h_park_yn,
+		               MAX(H.h_bigo) AS h_bigo, 
+		               COUNT(DISTINCT R.r_id) AS review_cnt, 
+		               ROUND(AVG(COALESCE(R.r_eval_pt,0)),1) AS avg_eval_pt, 
+		               COUNT(DISTINCT C.c_id) AS comment_cnt,
+		               COUNT(DISTINCT L.l_id) AS like_cnt
+		        FROM hospital H
+		        LEFT JOIN h_review R ON H.h_code = R.h_code
+		        LEFT JOIN h_comment C ON R.r_id = C.r_id
+		        LEFT JOIN h_like L ON R.r_id = L.l_id
+		        WHERE 
+		           COALESCE(R.r_del_yn,'N') = 'N'
+		           AND COALESCE(C.c_del_yn,'N') = 'N'
+		            /* === para1, para2, para3를 merge 추가된 검색 조건 시작 === */
+		           AND ((:para1 IS NOT NULL AND H.h_name||H.h_addr||(CASE WHEN H.h_park_yn = 'Y' THEN '주차가능' ELSE '주차불가' END) LIKE CONCAT('%', :para1, '%'))
+		               OR (:para2 IS NOT NULL AND H.h_name||H.h_addr||(CASE WHEN H.h_park_yn = 'Y' THEN '주차가능' ELSE '주차불가' END) LIKE CONCAT('%', :para2, '%'))
+		               OR (:para3 IS NOT NULL AND H.h_name||H.h_addr||(CASE WHEN H.h_park_yn = 'Y' THEN '주차가능' ELSE '주차불가' END) LIKE CONCAT('%', :para3, '%'))
+		               )
+		            /* === para1, para2, para3를 merge 추가된 검색 조건 종료 === */
+		        GROUP BY H.h_code, H.h_name
+		        ORDER BY review_cnt DESC, avg_eval_pt DESC, like_cnt DESC, comment_cnt DESC, h_code
+		        """,
+		        countQuery = """
+		            SELECT COUNT(DISTINCT H.h_code) COUNT
+		            FROM hospital H
+		            LEFT JOIN h_review R ON H.h_code = R.h_code
+		            LEFT JOIN h_comment C ON R.r_id = C.r_id
+		            LEFT JOIN h_like L ON R.r_id = L.l_id
+		            WHERE 
+		                COALESCE(R.r_del_yn,'N') = 'N'
+		                AND COALESCE(C.c_del_yn, 'N') = 'N'
+		        	/* === para1, para2, para3를 merge 추가된 검색 조건 시작 === */
+		        	    AND ((:para1 IS NOT NULL AND H.h_name||H.h_addr||(CASE WHEN H.h_park_yn = 'Y' THEN '주차가능' ELSE '주차불가' END) LIKE CONCAT('%', :para1, '%'))
+		                     OR (:para2 IS NOT NULL AND H.h_name||H.h_addr||(CASE WHEN H.h_park_yn = 'Y' THEN '주차가능' ELSE '주차불가' END) LIKE CONCAT('%', :para2, '%'))
+		                     OR (:para3 IS NOT NULL AND H.h_name||H.h_addr||(CASE WHEN H.h_park_yn = 'Y' THEN '주차가능' ELSE '주차불가' END) LIKE CONCAT('%', :para3, '%'))
+		                    )
+		        	/* === para1, para2, para3를 merge 추가된 검색 조건 종료 === */
+		            """,
+		        nativeQuery = true)
+		    Page<HospitalSumDTO> findHospitalSumByReviewAndTopListFindPara1(
+		            Pageable pageable,
+		            @Param("para1") String para1,
+		            @Param("para2") String para2,
+		            @Param("para3") String para3);
+
+	 
+	 @Query(value = """
+		        SELECT H.h_code AS h_code, 
+		               H.h_name AS h_name, 
+		               MAX(H.h_addr) AS h_addr,
+		               MAX(H.h_tel1) AS h_tel1,
+		               MAX(COALESCE(h_tel2, '010-0000-0000')) AS h_tel2,
+		               MAX(CASE WHEN H.h_park_yn = 'Y' THEN '주차가능' ELSE '주차불가' END ) AS h_park_yn,
+		               MAX(H.h_bigo) AS h_bigo, 
+		               COUNT(DISTINCT R.r_id) AS review_cnt, 
+		               ROUND(AVG(COALESCE(R.r_eval_pt,0)),1) AS avg_eval_pt, 
+		               COUNT(DISTINCT C.c_id) AS comment_cnt,
+		               COUNT(DISTINCT L.l_id) AS like_cnt
+		        FROM hospital H
+		        LEFT JOIN h_review R ON H.h_code = R.h_code
+		        LEFT JOIN h_comment C ON R.r_id = C.r_id
+		        LEFT JOIN h_like L ON R.r_id = L.l_id
+		        WHERE 
+		           COALESCE(R.r_del_yn,'N') = 'N'
+		           AND COALESCE(C.c_del_yn,'N') = 'N'
+		            /* === para1, para2, para3를 merge 추가된 검색 조건 시작 === */
+		           AND ((:para1 IS NOT NULL AND H.h_name||H.h_addr||(CASE WHEN H.h_park_yn = 'Y' THEN '주차가능' ELSE '주차불가' END) LIKE CONCAT('%', :para1, '%'))
+		               OR (:para2 IS NOT NULL AND H.h_name||H.h_addr||(CASE WHEN H.h_park_yn = 'Y' THEN '주차가능' ELSE '주차불가' END) LIKE CONCAT('%', :para2, '%'))
+		               OR (:para3 IS NOT NULL AND H.h_name||H.h_addr||(CASE WHEN H.h_park_yn = 'Y' THEN '주차가능' ELSE '주차불가' END) LIKE CONCAT('%', :para3, '%'))
+		               )
+		            /* === para1, para2, para3를 merge 추가된 검색 조건 종료 === */
+		        GROUP BY H.h_code, H.h_name
+		        ORDER BY comment_cnt DESC, avg_eval_pt DESC, review_cnt DESC, like_cnt DESC, h_code
+		        """,
+		        countQuery = """
+		            SELECT COUNT(DISTINCT H.h_code) COUNT
+		            FROM hospital H
+		            LEFT JOIN h_review R ON H.h_code = R.h_code
+		            LEFT JOIN h_comment C ON R.r_id = C.r_id
+		            LEFT JOIN h_like L ON R.r_id = L.l_id
+		            WHERE 
+		                COALESCE(R.r_del_yn,'N') = 'N'
+		                AND COALESCE(C.c_del_yn, 'N') = 'N'
+		        	/* === para1, para2, para3를 merge 추가된 검색 조건 시작 === */
+		        	    AND ((:para1 IS NOT NULL AND H.h_name||H.h_addr||(CASE WHEN H.h_park_yn = 'Y' THEN '주차가능' ELSE '주차불가' END) LIKE CONCAT('%', :para1, '%'))
+		                     OR (:para2 IS NOT NULL AND H.h_name||H.h_addr||(CASE WHEN H.h_park_yn = 'Y' THEN '주차가능' ELSE '주차불가' END) LIKE CONCAT('%', :para2, '%'))
+		                     OR (:para3 IS NOT NULL AND H.h_name||H.h_addr||(CASE WHEN H.h_park_yn = 'Y' THEN '주차가능' ELSE '주차불가' END) LIKE CONCAT('%', :para3, '%'))
+		                    )
+		        	/* === para1, para2, para3를 merge 추가된 검색 조건 종료 === */
+		            """,
+		        nativeQuery = true)
+		    Page<HospitalSumDTO> findHospitalSumByCommentAndTopListFindPara1(
+		            Pageable pageable,
+		            @Param("para1") String para1,
+		            @Param("para2") String para2,
+		            @Param("para3") String para3);
+		    
 }
