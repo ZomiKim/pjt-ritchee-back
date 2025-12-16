@@ -78,6 +78,7 @@ public class HospitalController {
 	@PostMapping("/api/review")
 	public ResponseEntity<String> reviewCreate(@RequestBody ReviewCreateDto req) {
 		try {
+			System.out.println("ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ" + req);
 			hService.reviewCreate(req);
 			return ResponseEntity.ok("Review SUCCESS");
 		} catch (Exception e) {
