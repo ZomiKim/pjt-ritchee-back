@@ -65,7 +65,7 @@ public class AppointmentController {
         	@RequestParam(name = "size", defaultValue = "10") int size) {
     		
     		Pageable pageable = PageRequest.of(page, size);
-    		Page<AppointmentFullDto> appointmentsPage = appointmentRepository.findByUserId(a_user_id , pageable);
+    		Page<AppointmentFullDto> appointmentsPage = appointmentRepository.findByUserIdAndCode(a_user_id , pageable);
     	
 			return appointmentsPage;
     	

@@ -155,7 +155,7 @@ public interface AppointmentRepository extends JpaRepository<H_appm, Integer> {
 				  AND staff.id = :a_user_id
 
 			""", nativeQuery = true)
-	Page<AppointmentFullDto> findByUserId(@Param("a_user_id") UUID a_user_id, Pageable pageable);
+	Page<AppointmentFullDto> findByUserIdAndCode(@Param("a_user_id") UUID a_user_id, Pageable pageable);
 	
 	@Query(value = """
             SELECT
