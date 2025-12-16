@@ -65,13 +65,13 @@ public class AppointmentController {
         	@RequestParam(name = "size", defaultValue = "10") int size) {
     		
     		Pageable pageable = PageRequest.of(page, size);
-    		Page<AppointmentFullDto> appointmentsPage = appointmentRepository.findByUserIdAndCode(a_user_id , pageable);
+    		Page<AppointmentFullDto> appointmentsPage = appointmentRepository.findByUserId(a_user_id , pageable);
     	
 			return appointmentsPage;
     	
     }
     
-    // 병원별, 사용자별 예약 리스트 (hospitalController에 있는 api와의 차이점 : 유저 정보 추가)
+    
     @GetMapping("/api/appmListOfUser")
     public Page<AppointmentFullDto> getHospitalAppointmentsById(
     		@RequestParam("h_code") String h_code,

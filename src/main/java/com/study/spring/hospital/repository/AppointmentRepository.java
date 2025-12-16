@@ -149,13 +149,13 @@ public interface AppointmentRepository extends JpaRepository<H_appm, Integer> {
 		    SELECT COUNT(a.a_id)
 				FROM h_appm a
 				JOIN hospital h   ON a.h_code = h.h_code
-				JOIN h_user staff ON staff.text = h.h_code AND staff.u_kind = '2'
+				JOIN h_user staff ON LEFT(TRIM(staff.text),8) = h.h_code AND staff.u_kind = '2'
 				JOIN h_user u     ON a.a_user_id = u.id
 				WHERE COALESCE(a.a_del_yn, 'N') = 'N'
 				  AND staff.id = :a_user_id
 
 			""", nativeQuery = true)
-	Page<AppointmentFullDto> findByUserIdAndCode(@Param("a_user_id") UUID a_user_id, Pageable pageable);
+	Page<AppointmentFullDto> findByUserId(@Param("a_user_id") UUID a_user_id, Pageable pageable);
 	
 	@Query(value = """
             SELECT
