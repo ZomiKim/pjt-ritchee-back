@@ -69,15 +69,15 @@ public interface HospitalRepository extends JpaRepository<Hospital, String> {
 			""")
 	List<Hospital> findWithReview();
 
-//	@Query("""
-//			select r
-//			from H_review  r
-//			join r.comments
-//			order by r.r_id desc
-//			""")
-////	r.comments는 엔티티에서 가져오는 네임
-//	List<H_review> findWithComment();
-
+/*	@Query("""
+			select r
+			from H_review  r
+			join r.comments
+			order by r.r_id desc
+			""")
+	r.comments는 엔티티에서 가져오는 네임
+	List<H_review> findWithComment();
+*/
 	@Query("""
 			select h
 			from Hospital h

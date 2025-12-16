@@ -1,10 +1,12 @@
 package com.study.spring.hospital.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.study.spring.hospital.dto.MyReviewLikeDto;
@@ -26,8 +28,8 @@ public class ReviewController {
 	MyReviewService myReviewService;
 
 	@GetMapping("/api/myreviewlist")
-	public List<MyReviewListDto> getMyLivew() {
-		return myRLRepo.findByMyReviewList();
+	public List<MyReviewListDto> getMyLivew(@RequestParam("userId") UUID userId) {
+		return myRLRepo.findByMyReviewList(userId);
 	}
 
 	@GetMapping("/api/myreviewlist/{id}")

@@ -307,7 +307,8 @@ public class HospitalService {
     			.r_title(req.getR_title())
     			.r_content(req.getR_content())
     			.r_eval_pt(req.getR_eval_pt())
-    			.r_del_yn(req.getR_del_yn())
+    			.r_views(0)
+    			.r_del_yn("N")
 	    		.build();
 	    
 	    rRepo.save(review);
