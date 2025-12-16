@@ -64,10 +64,13 @@ public interface AppointmentRepository extends JpaRepository<H_appm, Integer> {
 			             ELSE u.gender END As gender,
 			        EXTRACT(YEAR FROM AGE(CURRENT_DATE, u.birth)) AS Age,
 	                u.u_kind user_ukind, '!' staff_ukind,
-	                u.id AS u_id
+	                u.id AS u_id,
+	                CASE WHEN COALESCE(r.r_id, 0) = 0 AND COALESCE(A.a_dia_name,'!') <> '!' THEN 'Y'
+			        ELSE 'N' END R_able_yn 
 			    FROM h_appm a
 			    JOIN hospital h ON a.h_code = h.h_code
 			    JOIN h_user u ON a.a_user_id = u.id
+			    LEFT JOIN h_review r ON a.a_id = r.a_id
 			    WHERE a.a_user_id = :userId
 			        AND COALESCE(a.a_del_yn,'N') = 'N'
 			    ORDER BY a.a_id DESC
@@ -76,6 +79,7 @@ public interface AppointmentRepository extends JpaRepository<H_appm, Integer> {
 			    FROM h_appm a
 			    JOIN hospital h ON a.h_code = h.h_code
 			    JOIN h_user u ON a.a_user_id = u.id
+			    LEFT JOIN h_review r on a.a_id = r.a_id
 			    WHERE a.a_user_id = :userId
 			    AND COALESCE(a.a_del_yn,'N') = 'N'
 			""", nativeQuery = true // 네이티브 SQL 사용 설정

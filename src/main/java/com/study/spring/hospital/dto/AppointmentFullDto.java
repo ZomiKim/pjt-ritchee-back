@@ -19,6 +19,7 @@ public interface AppointmentFullDto {
 	String getUser_ukind();
 	String getStaff_ukind();
 	UUID getU_id();
+	String getR_able_yn();
 }
 
 //@Data
