@@ -296,10 +296,20 @@ public class HospitalService {
 
 	    User user = uRepo.findById(req.getH_user_id())
 	            .orElseThrow(() -> new RuntimeException("User not Found"));
-	    
 	    H_appm appm = aRepo.findById(req.getA_id())
 	    		.orElseThrow(() -> new RuntimeException("Appointent not Found"));
 	    
+	    // 본인 맞는지
+	    if (!appm.getH_user().getId().equals(user.getId())) {
+	    	throw new RuntimeException("본인 예약만 리뷰 작성이 가능합니다.");
+	    }
+	    
+	    // 중복 방지
+	    if (appm.getH_review() != null) throw new RuntimeException("이미 리뷰가 작성된 예약입니다.");
+	    
+	    // 평점 검증
+	    if (req.getR_eval_pt() < 1 || req.getR_eval_pt() > 5) throw new RuntimeException("평점은 1 ~ 5 사이여야 합니다.");
+
 	    H_review review = H_review.builder()
     			.hospital(hospital)
     			.h_user(user)
@@ -311,8 +321,8 @@ public class HospitalService {
     			.r_del_yn("N")
 	    		.build();
 	    
+	    appm.setH_review(review);
 	    rRepo.save(review);
-
 	}
 
 	public List<H_AppmUserDto> findAppmWithUser() {
@@ -341,7 +351,7 @@ public class HospitalService {
 				.toList();
 	}
 
-	public String getAble(String h_code, LocalTime time) {
+	public String getAble(String h_code, String time) {
 		return hRepo.getAble(h_code, time);
 	}
 

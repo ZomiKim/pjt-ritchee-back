@@ -195,7 +195,7 @@ public interface HospitalRepository extends JpaRepository<Hospital, String> {
 
 			""",
 			nativeQuery = true)
-	String getAble(@Param("h_code") String h_code, @Param("time") LocalTime time);
+	String getAble(@Param("h_code") String h_code, @Param("time") String time);
 
 	@Query("""
 			select new com.study.spring.hospital.dto.AppointmentDto(

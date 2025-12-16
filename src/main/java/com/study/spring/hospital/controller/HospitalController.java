@@ -78,7 +78,6 @@ public class HospitalController {
 	@PostMapping("/api/review")
 	public ResponseEntity<String> reviewCreate(@RequestBody ReviewCreateDto req) {
 		try {
-			System.out.println("ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ" + req);
 			hService.reviewCreate(req);
 			return ResponseEntity.ok("Review SUCCESS");
 		} catch (Exception e) {
@@ -167,7 +166,8 @@ public class HospitalController {
 	
 	// 입력된 시간이 운영 시간 내인지 확인하는 API
 	@GetMapping("/api/run")
-	public String getAble(@RequestParam(name="h_code") String h_code, @RequestParam(name="time") LocalTime time) {
+	public String getAble(@RequestParam(name="h_code") String h_code, @RequestParam(name="time") String time) {
+		System.out.println("들어온 시간 " + time);
 		return hService.getAble(h_code, time);
 	}
 }
