@@ -164,7 +164,7 @@ public interface HospitalRepository extends JpaRepository<Hospital, String> {
 			FROM H_appm a
 			JOIN h_user u
 			JOIN hospital h
-			WHERE u.id = :userId AND a.a_id = :a_id
+			WHERE u.id = :userId AND a.a_id = :a_id AND COALESCE(a.a_del_yn,'N') = 'N'
 			""")
 	H_appm findAppmWithUserById(@Param("a_id") Integer a_id, @Param("userId") UUID userId);
 

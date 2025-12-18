@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.study.spring.hospital.dto.AppointmentDto;
 import com.study.spring.hospital.dto.AppointmentWithHospitalNameDto;
@@ -41,6 +42,7 @@ import com.study.spring.user.entity.User;
 import com.study.spring.user.repository.UserRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class HospitalService {
 	@Autowired
 	HospitalRepository hRepo;
@@ -48,9 +50,6 @@ public class HospitalService {
 	UserRepository uRepo;
 	@Autowired
 	HospitalAppmRepository aRepo;
-
-	@Autowired
-	HospitalCommentRepository cRepo;
 	@Autowired
 	HospitalReviewRepository rRepo;
 	
@@ -199,12 +198,15 @@ public class HospitalService {
 				.toList();
 	}
 	
+	// 예약 post
+	@Transactional(readOnly = false)
 	public Integer appmCreate(ReservationDto req) {
 		Hospital hospital = hRepo.findById(req.getH_code())
 	            .orElseThrow(() -> new RuntimeException("Hospital not Found"));
 
 	    User user = uRepo.findById(req.getA_user_id())
 	            .orElseThrow(() -> new RuntimeException("User not Found"));
+	    
 
 	    H_appm appm = H_appm.builder()
 	            .hospital(hospital)
@@ -217,6 +219,7 @@ public class HospitalService {
 	    return saved.getA_id();
 	}
 
+	// 유저 정보 기준으로 조회하는 예약 개별 조회
 	public H_AppmUserHosDto findAppmWithUserById(Integer a_id, UUID userId) {
 	    H_appm appm = hRepo.findAppmWithUserById(a_id, userId);
 	    if (appm == null) throw new RuntimeException("예약 정보를 찾을 수 없습니다.");
@@ -290,6 +293,7 @@ public class HospitalService {
 	}
 
 
+	@Transactional(readOnly = false)
 	public void reviewCreate(ReviewCreateDto req) {
 		Hospital hospital = hRepo.findById(req.getH_code())
 	            .orElseThrow(() -> new RuntimeException("Hospital not Found"));
@@ -321,8 +325,11 @@ public class HospitalService {
     			.r_del_yn("N")
 	    		.build();
 	    
-	    appm.setH_review(review);
+	    // 리뷰 저장 -> 예약에 연결
+	    
 	    rRepo.save(review);
+	    appm.setH_review(review);
+	    aRepo.save(appm);
 	}
 
 	public List<H_AppmUserDto> findAppmWithUser() {

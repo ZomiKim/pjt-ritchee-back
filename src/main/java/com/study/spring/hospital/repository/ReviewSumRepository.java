@@ -66,7 +66,7 @@ public interface ReviewSumRepository extends JpaRepository<H_review, Integer>{
 			AND COALESCE(C.c_del_yn,'N') = 'N'  
 			AND R.h_code = :h_code
 			GROUP BY R.r_id, R.a_id, R.h_code, R.h_user_id
-			ORDER BY R.r_id  
+			ORDER BY R.r_id  DESC
 				""",
 			countQuery = """
 			SELECT COUNT(DISTINCT R.r_id) COUNT

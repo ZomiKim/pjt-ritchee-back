@@ -73,7 +73,7 @@ public interface AppointmentRepository extends JpaRepository<H_appm, Integer> {
 			    LEFT JOIN h_review r ON a.a_id = r.a_id
 			    WHERE a.a_user_id = :userId
 			        AND COALESCE(a.a_del_yn,'N') = 'N'
-			    ORDER BY a.a_id DESC
+			    ORDER BY a_date DESC, a_time DESC 
 			""", countQuery = """
 			    SELECT count(a.a_id)
 			    FROM h_appm a
@@ -122,32 +122,44 @@ public interface AppointmentRepository extends JpaRepository<H_appm, Integer> {
 
 	@Query(value = """
             SELECT
-                a.a_id AS a_id,
-                h.h_code AS h_code,
-                h.h_name AS h_name,
-                a.a_content AS a_content,
-                a.a_dia_name AS a_dia_name,
-                a.a_dia_content AS a_dia_content,
-                TO_CHAR(a.a_date, 'YYYY-MM-DD') AS a_date,
-                TO_CHAR(a.a_date, 'HH24:MI') AS a_time,
-                u.phone AS phone,
-                u.text AS text,
-                u.name AS u_name,
-                CASE
-                    WHEN u.gender = 'M' THEN '남'
-                    WHEN u.gender = 'F' THEN '여'
-                    ELSE u.gender
-                END AS gender,
-                EXTRACT(YEAR FROM AGE(CURRENT_DATE, u.birth)) AS age,
-                u.u_kind user_ukind, staff.u_kind staff_ukind,
-                u.id AS u_id
+			    a.a_id AS a_id,
+			    h.h_code AS h_code,
+			    h.h_name AS h_name,
+			    a.a_content AS a_content,
+			    a.a_dia_name AS a_dia_name,
+			    a.a_dia_content AS a_dia_content,
+			    TO_CHAR(a.a_date, 'YYYY-MM-DD') AS a_date,
+			    TO_CHAR(a.a_date, 'HH24:MI') AS a_time,
+			    u.phone AS phone,
+			    u.text AS text,
+			    u.name AS u_name,
+			    CASE
+			        WHEN u.gender = 'M' THEN '남'
+			        WHEN u.gender = 'F' THEN '여'
+			        ELSE u.gender
+			    END AS gender,
+			    EXTRACT(YEAR FROM AGE(CURRENT_DATE, u.birth)) AS age,
+			    u.u_kind user_ukind,
+			    staff.u_kind staff_ukind,
+			    u.id AS u_id
 			FROM h_appm a
 			JOIN hospital h ON a.h_code = h.h_code
 			JOIN h_user u ON a.a_user_id = u.id
-			JOIN h_user staff ON LEFT(TRIM(staff.text),8) = h.h_code AND staff.u_kind = '2'
+			JOIN h_user staff
+			  ON LEFT(TRIM(staff.text),8) = h.h_code
+			 AND staff.u_kind = '2'
 			WHERE COALESCE(a.a_del_yn, 'N') = 'N'
 			  AND staff.id = :a_user_id
-			ORDER BY a.a_id DESC
+			ORDER BY
+			    a_date DESC,
+			    CASE
+			        WHEN
+			            COALESCE(TRIM(a.a_dia_name), '') = ''
+			            OR COALESCE(TRIM(a.a_dia_content), '') = ''
+			        THEN 0
+			        ELSE 1
+			    END,
+			    a.a_id ASC
 		    """, 
 		    countQuery = """
 		    SELECT COUNT(a.a_id)

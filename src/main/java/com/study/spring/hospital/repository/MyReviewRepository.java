@@ -31,7 +31,9 @@ public interface MyReviewRepository extends JpaRepository<H_review, Integer> {
             hr.createdAt
         )
         from H_review hr
+        join hr.hospital h
         where hr.h_user.id = :userId
+        order by hr.createdAt desc
     """)
     List<MyReviewListDto> findByMyReviewList(@Param("userId") UUID userId);
 
